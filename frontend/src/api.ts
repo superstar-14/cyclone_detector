@@ -1,8 +1,24 @@
 /**
  * IMD Cyclone Detector – API Client
  */
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
-const WS_URL = import.meta.env.VITE_WS_URL || 'ws://localhost:8000/ws/live';
+// In production or when hosted together, default to relative path '' so requests go to current origin.
+// In dev mode, fall back to 'http://localhost:8000' if VITE_API_URL is not set.
+const API_BASE = import.meta.env.VITE_API_URL !== undefined
+  ? import.meta.env.VITE_API_URL
+  : (import.meta.env.PROD ? '' : 'http://localhost:8000');
+
+function getWsUrl(): string {
+  if (import.meta.env.VITE_WS_URL) {
+    return import.meta.env.VITE_WS_URL;
+  }
+  if (typeof window !== 'undefined') {
+    const proto = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    return `${proto}//${window.location.host}/ws/live`;
+  }
+  return 'ws://localhost:8000/ws/live';
+}
+
+const WS_URL = getWsUrl();
 
 import type { Storm, Forecast, DistrictImpact, DataSourceHealth, ForecastPoint } from './types';
 

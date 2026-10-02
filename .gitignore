@@ -1,1 +1,10 @@
-﻿.env
+.env
+.env.local
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+node_modules/
+dist/
+*.log
+.pytest_cache/

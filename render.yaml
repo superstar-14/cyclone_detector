@@ -1,0 +1,35 @@
+# ============================================================
+# Render Blueprint Specification
+# IMD Cyclone Detector – Tropical Cyclone Prediction Platform
+#
+# Optimized for Render Free Tier:
+# - Memory limit: 512 MB (Service runs at ~60MB RAM)
+# - Workers: 1 worker (prevents memory multiplication & OOM)
+# - Concurrency: 50 concurrent connections with 5s keepalive
+# - Healthcheck: /healthz
+# ============================================================
+
+services:
+  # Unified Web Service: Serves both the React Frontend UI & FastAPI Backend
+  - type: web
+    name: cyclone-detector
+    runtime: python
+    plan: free
+    region: oregon
+    buildCommand: chmod +x ./build.sh && ./build.sh
+    startCommand: chmod +x ./start.sh && ./start.sh
+    healthCheckPath: /healthz
+    autoDeploy: true
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: DEMO_MODE
+        value: "true"
+      - key: DEBUG
+        value: "false"
+      - key: PYTHONUNBUFFERED
+        value: "1"
+      - key: LOG_LEVEL
+        value: INFO
+      - key: SECRET_KEY
+        generateValue: true

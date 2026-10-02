@@ -1,0 +1,5 @@
+# ============================================================
+# IMD Cyclone Detector – Root Requirements for Render
+# Mirrors backend/requirements.txt
+# ============================================================
+-r backend/requirements.txt
